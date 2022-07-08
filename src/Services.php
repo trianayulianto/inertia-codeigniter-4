@@ -2,11 +2,11 @@
 
 namespace Inertia;
 
-use CodeIgniter\Config\Services as BaseServices;
+use CodeIgniter\Config\BaseService;
 
-class Services extends BaseServices
+class Services extends BaseService
 {
-    public static function inertia($getShared = true)
+    public static function inertia(bool $getShared = true)
     {
         if ($getShared) {
             return static::getSharedInstance('inertia');
