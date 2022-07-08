@@ -3,6 +3,7 @@
 namespace Inertia;
 
 use CodeIgniter\HTTP\RedirectResponse;
+use CodeIgniter\HTTP\Request;
 
 class Factory
 {
@@ -122,6 +123,15 @@ class Factory
 
     public function location($url)
     {
-//        return BaseResponse::make('', 409, ['X-Inertia-Location' => $url]);
+        if ($url instanceof Request) {
+            $url = $url->getUri();
+        }
+
+        if (Services::request()->hasHeader('X-Inertia')) {
+            return $this->redirectResponse()->setHeader('X-Inertia-Location', $url)
+                ->setStatusCode(409);
+        }
+
+        return $this->redirect($url);
     }
 }
