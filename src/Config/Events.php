@@ -4,6 +4,6 @@ namespace Inertia\Config;
 
 use CodeIgniter\Events\Events;
 
-Events::on('post_controller_constructor', static function () {
+Events::on('pre_system', static function () {
 	helper('inertia');
 });

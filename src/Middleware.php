@@ -33,6 +33,10 @@ class Middleware
             return md5_file($manifest);
         }
 
+        if (file_exists($manifest = './build/manifest.json')) {
+            return md5_file($manifest);
+        }
+
         return null;
     }
 
@@ -74,8 +78,17 @@ class Middleware
      *
      * @return mixed
      */
-    public function before(RequestInterface $request, $arguments = null) {
-        //
+    public function before(RequestInterface $request, $arguments = null) 
+    {
+        $request = Services::request();
+
+        Inertia::version(function () use ($request) {
+            return $this->version($request);
+        });
+
+        Inertia::share($this->share($request));
+
+        Inertia::setRootView($this->rootView($request));
     }
 
     /**
@@ -90,18 +103,44 @@ class Middleware
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
         $request = Services::request();
+        Services::response()->setHeader('Vary', 'X-Inertia');
 
-        Inertia::version(function () use ($request) {
-            return $this->version($request);
-        });
+        if (! $request->header('X-Inertia')) {
+            return $response;
+        }
 
-        Inertia::share($this->share($request));
+        if ($request->getMethod(true) === 'GET' && 
+            $request->header('X-Inertia-Version', '') !== Inertia::getVersion()
+        ) {
+            $response = $this->onVersionChange($request, $response);
+        }
 
-        Inertia::setRootView($this->rootView($request));
+        if ($response->getStatusCode() === 200 && 
+            empty($response->sendBody())
+        ) {
+            $response = $this->onEmptyResponse($request, $response);
+        }
 
-        $response = $this->checkVersion($request, $response);
+        if ($response->getStatusCode() === 302 &&
+            in_array($request->getMethod(true), ['PUT', 'PATCH', 'DELETE'])
+        ) {
+            $response->setStatusCode(303);
+        }
 
-        return $this->changeRedirectCode($request, $response);
+        return $response;
+    }
+
+    /**
+     * Determines what to do when an Inertia action returned with no response.
+     * By default, we'll redirect the user back to where they came from.
+     *
+     * @param  Request  $request
+     * @param  ResponseInterface  $response
+     * @return ResponseInterface
+     */
+    public function onEmptyResponse(Request $request, ResponseInterface $response): ResponseInterface
+    {
+        return Inertia::redirectResponse()->back();
     }
 
     /**
@@ -112,36 +151,9 @@ class Middleware
      * @param  ResponseInterface  $response
      * @return ResponseInterface
      */
-    public function checkVersion(Request $request, ResponseInterface $response)
+    public function onVersionChange(Request $request, ResponseInterface $response)
     {
-        if ($request->header('X-Inertia') &&
-            $request->getMethod(true) === 'GET' &&
-            $request->header('X-Inertia-Version', '') !== Inertia::getVersion()
-        ) {
-            return Inertia::location((string) $request->getUri());
-        }
-
-        return $response;
-    }
-
-    /**
-     * Changes the status code during redirects, ensuring they are made as
-     * GET requests, preventing "MethodNotAllowedHttpException" errors.
-     *
-     * @param  Request  $request
-     * @param  ResponseInterface  $response
-     * @return ResponseInterface
-     */
-    public function changeRedirectCode(Request $request, ResponseInterface $response)
-    {
-        if ($request->header('X-Inertia') &&
-            $response->getStatusCode() === 302 &&
-            in_array($request->getMethod(true), ['PUT', 'PATCH', 'DELETE'])
-        ) {
-            $response->setStatusCode(303);
-        }
-
-        return $response;
+        return Inertia::location((string) $request->getUri());
     }
 
     /**
