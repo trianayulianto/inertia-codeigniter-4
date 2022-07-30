@@ -5,6 +5,7 @@ namespace Inertia;
 use CodeIgniter\Config\View;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\Response as HttpResponse;
+use Inertia\Config\Services;
 
 class Response
 {
@@ -75,7 +76,7 @@ class Response
         $inertia = $this->request()->getHeader('X-Inertia');
 
         if ($inertia && $inertia->getValue()) {
-            $this->response()->setHeader('Vary', 'Accept');
+            $this->response()->setHeader('Vary', 'X-Inertia');
             $this->response()->setHeader('X-Inertia', 'true');
             $this->response()->setHeader('Content-Type', 'application/json');
 

@@ -4,6 +4,7 @@ namespace Inertia;
 
 use CodeIgniter\HTTP\RedirectResponse;
 use CodeIgniter\HTTP\Request;
+use Inertia\Config\Services;
 
 class Factory
 {

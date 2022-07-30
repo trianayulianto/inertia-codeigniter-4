@@ -1,17 +1,17 @@
 <?php
 
-namespace Inertia;
+namespace Inertia\Config;
 
 use CodeIgniter\Config\BaseService;
 
 class Services extends BaseService
 {
-    public static function inertia(bool $getShared = true)
+    public static function inertia($getShared = true)
     {
         if ($getShared) {
             return static::getSharedInstance('inertia');
         }
 
-        return new Factory;
+        return new \Inertia\Factory;
     }
 }

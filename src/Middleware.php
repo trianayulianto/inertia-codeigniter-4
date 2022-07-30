@@ -78,7 +78,7 @@ class Middleware
      *
      * @return mixed
      */
-    public function before(RequestInterface $request, $arguments = null) 
+    public function before(RequestInterface $request, $arguments = null)
     {
         $request = Services::request();
 
@@ -106,16 +106,16 @@ class Middleware
         Services::response()->setHeader('Vary', 'X-Inertia');
 
         if (! $request->header('X-Inertia')) {
-            return $response;
+            return;
         }
 
-        if ($request->getMethod(true) === 'GET' && 
+        if ($request->getMethod(true) === 'GET' &&
             $request->header('X-Inertia-Version', '') !== Inertia::getVersion()
         ) {
             $response = $this->onVersionChange($request, $response);
         }
 
-        if ($response->getStatusCode() === 200 && 
+        if ($response->getStatusCode() === 200 &&
             empty($response->sendBody())
         ) {
             $response = $this->onEmptyResponse($request, $response);
@@ -126,8 +126,6 @@ class Middleware
         ) {
             $response->setStatusCode(303);
         }
-
-        return $response;
     }
 
     /**

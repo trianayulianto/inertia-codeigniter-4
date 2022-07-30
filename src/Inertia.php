@@ -2,7 +2,7 @@
 
 namespace Inertia;
 
-use Illuminate\Support\Facades\Facade;
+use Inertia\Config\Services;
 
 /**
  * @method static void setRootView(string $name)
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static Response render($component, array $props = [])
  * @method static \CodeIgniter\HTTP\Response location($url)
  *
- * @see \Inertia\ResponseFactory
+ * @see Factory
  */
 class Inertia
 {
