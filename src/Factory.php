@@ -135,6 +135,8 @@ class Factory
         }
 
         if (Services::request()->hasHeader('X-Inertia')) {
+            Services::session()->set('_ci_previous_url', $url);
+
             return $this->redirectResponse()->setHeader('X-Inertia-Location', $url)
                 ->setStatusCode(409);
         }
