@@ -2,7 +2,6 @@
 
 namespace Inertia;
 
-use Closure;
 use CodeIgniter\HTTP\Request;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -163,16 +162,18 @@ class Middleware
      */
     public function resolveValidationErrors(Request $request)
     {
-        $validation = \Config\Services::validation();
+        Services::session();
 
-        if (! $validation->listErrors()) {
+        $errors = Services::validation()->getErrors();
+
+        if (! $errors) {
             return (object) [];
         }
 
         if ($request->header('x-inertia-error-bag')) {
-            return (object) [$request->header('x-inertia-error-bag') => $validation->getErrors()];
+            return (object) [$request->header('x-inertia-error-bag') => $errors];
         }
 
-        return (object) $validation->getErrors();
+        return (object) $errors;
     }
 }
