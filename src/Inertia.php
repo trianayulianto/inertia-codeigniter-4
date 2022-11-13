@@ -7,7 +7,7 @@ use Inertia\Config\Services;
 /**
  * @method static void setRootView(string $name)
  * @method static void share($key, $value = null)
- * @method static array getShared(string $key = null, $default = null)
+ * @method static array getShared(string $key = null)
  * @method static void version($version)
  * @method static int|string getVersion()
  * @method static Response render($component, array $props = [])

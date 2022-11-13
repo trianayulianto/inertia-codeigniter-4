@@ -54,11 +54,17 @@ class Factory
      */
     public function getShared($key = null): array
     {
+        $sharedProps = $this->sharedProps;
+
+        array_walk_recursive($sharedProps, static function (&$sharedProp) {
+            $sharedProp = closure_call($sharedProp);
+        });
+
         if ($key) {
-            return array_get($this->sharedProps, $key);
+            return array_get($sharedProps, $key);
         }
 
-        return $this->sharedProps;
+        return $sharedProps;
     }
 
     /**
