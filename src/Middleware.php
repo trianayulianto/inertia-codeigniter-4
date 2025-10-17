@@ -160,9 +160,9 @@ class Middleware
      */
     public function resolveValidationErrors(Request $request)
     {
-        Services::session();
+        helper('form');
 
-        $errors = Services::validation()->getErrors();
+        $errors = validation_errors();
 
         if (! $errors) {
             return (object) [];
