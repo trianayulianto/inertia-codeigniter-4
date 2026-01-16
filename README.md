@@ -1,17 +1,15 @@
 # Inertia server-side adapter for CodeIgniter 4
 
-Forked from https://github.com/amiranagram/inertia-codeigniter-4
-
-![Tests](https://github.com/amiranagram/inertia-codeigniter-4/workflows/Tests/badge.svg)
-[![Total Downloads](https://img.shields.io/packagist/dt/amirami/inertia-codeigniter-4.svg)](https://packagist.org/packages/amirami/inertia-codeigniter-4)
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/amirami/inertia-codeigniter-4.svg)](https://packagist.org/packages/amirami/inertia-codeigniter-4)
+![Tests](https://github.com/trianayulianto/inertia-codeigniter-4/workflows/Tests/badge.svg)
+[![Total Downloads](https://img.shields.io/packagist/dt/trianayulianto/inertia-codeigniter-4.svg)](https://packagist.org/packages/trianayulianto/inertia-codeigniter-4)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/trianayulianto/inertia-codeigniter-4.svg)](https://packagist.org/packages/trianayulianto/inertia-codeigniter-4)
 
 ## Installation
 
-You can install the [original package](https://github.com/amiranagram/inertia-codeigniter-4) via composer:
+You can install the package via composer:
 
 ```bash
-composer require amirami/inertia-codeigniter-4
+composer require trianayulianto/inertia-codeigniter-4
 ```
 
 Or install its as **ThirdParty**:
@@ -155,7 +153,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Amir Rami](https://github.com/amirami)
+- [Amir Rami](https://github.com/amirami) - Original author
+- [Triana Yulianto](https://github.com/trianayulianto) - Current maintainer
 - [All Contributors](../../contributors)
 
 ## License
