@@ -24,7 +24,8 @@
     "require": {
         "php": "^8.1",
         "ext-json": "*",
-        "codeigniter4/framework": "^4.0.2"
+        "codeigniter4/framework": "^4.3",
+        "trianayulianto/vite-codeigniter-4": "^0.1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.13.0",

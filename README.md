@@ -12,26 +12,11 @@ You can install the package via composer:
 composer require trianayulianto/inertia-codeigniter-4
 ```
 
-Or install its as **ThirdParty**:
-
-```bash
-cd app/ThirdParty
-
-git clone https://github.com/trianayulianto/inertia-codeigniter-4.git
-```
-
-Set autoload in `app/Config/Autoload.php`
-
-```php
-public $psr4 = [
-    // others
-    'Inertia'     => APPPATH . 'ThirdParty/inertia-codeigniter-4/src'
-];
-```
-
 ## Usage
 
-### Root template
+### Server-Side Setup
+
+#### Root template
 - Make root view named `app.php`
 ```php
 <!DOCTYPE html>
@@ -41,19 +26,18 @@ public $psr4 = [
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title inertia>CI4-Inertia</title>
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="<?php echo base_url('css/app.css') ?>">
-
-    <!-- Scripts -->
-    <script src="<?php echo base_url('js/app.js') ?>" defer></script>
+    <!-- ViteJs Helper -->
+    <?= vite_react_refresh() ?>
+    <?= vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"]) ?>
+    <?= \Inertia\Directive::inertiaHead($page) ?>
 </head>
 <body>
-	<?= inertia()->app($page) ?>
+   	<?= \Inertia\Directive::inertia($page) ?>
 </body>
 </html>
 ```
 
-### Filter
+#### Filter
 
 - Make new filter
 ```bash
@@ -102,7 +86,7 @@ class HandleInertiaRequests extends Middleware implements FilterInterface
 }
 ```
 
-### Creating responses
+#### Creating responses
 That's it, you're all ready to go server-side! From here you can start creating Inertia responses.
 ```php
 use Inertia\Inertia;
@@ -118,6 +102,33 @@ class EventsController extends Controller
         ]);
     }
 }
+```
+
+### Client-Side Setup
+
+#### Install dependencies
+
+```bash
+npm install @inertiajs/react
+```
+
+#### Initialize the Inertia app
+
+In your `app.js` file, import the adapter and add it to the list of adapters:
+
+```js
+import { createInertiaApp } from '@inertiajs/react'
+import { createRoot } from 'react-dom/client'
+
+createInertiaApp({
+    resolve: name => {
+        const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true })
+        return pages[`./Pages/${name}.jsx`]
+    },
+    setup({ el, App, props }) {
+        createRoot(el).render(<App {...props} />)
+    },
+})
 ```
 
 ### More
